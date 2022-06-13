@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package mr;
+
+service Rpc {
+    rpc IsDone  (IsDoneArgs)  returns (IsDoneReply) {}
+    rpc AskTask (AskTaskArgs) returns (AskTaskReply) {}
+    rpc ReportTask (ReportTaskArgs) returns (ReportTaskReply) {}
+    rpc AmIOK (AmIOKArgs) returns (AmIOKReply) {}
+}
+
+message IsDoneArgs {
+}
+
+message IsDoneReply {
+    bool done = 1;
+}
+
+message AskTaskArgs {
+    int32 workerId = 1;
+}
+
+message AskTaskReply {
+    int32 workerId = 1;
+    bool hasTask = 2;
+    // map task
+    uint32 nreduce = 3; // 总共有多少个 reduce task
+    bool isMapTask = 4;
+    string filename = 5;
+    string mapBaseName = 6;
+
+    // 
+    bool isReduceTask = 7;
+    uint32 xreduce = 8;
+    string reduceBaseName = 9;
+    repeated string intermediateFiles = 10;
+}
+
+message ReportTaskArgs {
+    int32 workerId = 1;
+    repeated string intermediateFiles = 2;
+    int32 xreduce = 3;
+    string filename = 4;
+}
+
+message ReportTaskReply {
+    bool goodJob = 1;
+}
+
+message AmIOKArgs {
+    int32 workerId = 1;
+}
+
+message AmIOKReply {
+    bool ok = 1;
+}
